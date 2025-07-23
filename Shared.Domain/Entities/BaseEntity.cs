@@ -1,8 +1,10 @@
-﻿using Shared.Domain.Events;
+﻿using Shared.Domain.Abstractions;
+using Shared.Domain.Abstractions.Behaviors;
+using Shared.Domain.Events;
 
 namespace Shared.Domain.Entities
 {
-    public abstract class BaseEntity<TKey>
+    public abstract class BaseEntity<TKey> : IBaseEntity<TKey>, IAggregateRoot<TKey> where TKey : notnull
     {
         public virtual TKey Id { get; set; } = default!;
 

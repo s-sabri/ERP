@@ -4,7 +4,7 @@ using Shared.Domain.Entities;
 
 namespace Shared.Application.Contracts.Services
 {
-    public interface IBaseService<TEntity, TReadDto, TKey> where TEntity : BaseEntity<TKey>, IAggregateRoot, new()
+    public interface IBaseService<TEntity, TReadDto, TKey> where TKey : notnull where TEntity : BaseEntity<TKey>, IAggregateRoot<TKey>, new()
     {
         Task<TReadDto> AddAsync<TCreateDto>(TCreateDto dto);
         Task<TReadDto> UpdateAsync<TUpdateDto>(TUpdateDto dto, TKey id);

@@ -3,6 +3,7 @@ using System.Reflection;
 using Shared.Application.Abstractions.Context;
 using Shared.Application.Common;
 using Shared.Application.Contracts.Services;
+using Shared.Domain.Abstractions;
 using Shared.Domain.Abstractions.Behaviors;
 using Shared.Domain.Entities;
 using Shared.Domain.Exceptions;
@@ -10,7 +11,7 @@ using Shared.Domain.ValueObjects;
 
 namespace Shared.Application.Services
 {
-    public class EntityGraphProcessor<TEntity, TKey> : IEntityGraphProcessor<TEntity, TKey> where TEntity : BaseEntity<TKey> where TKey : notnull
+    public class EntityGraphProcessor<TEntity, TKey> : IEntityGraphProcessor<TEntity, TKey> where TKey : notnull where TEntity : BaseEntity<TKey>, IAggregateRoot<TKey>
     {
         private readonly IUserContext _userContext;
         private readonly Dictionary<Type, PropertyInfo[]> _propertyCache = new();

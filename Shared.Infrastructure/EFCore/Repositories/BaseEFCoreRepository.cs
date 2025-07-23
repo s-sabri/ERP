@@ -7,7 +7,7 @@ using Shared.Domain.Repositories;
 
 namespace Shared.Infrastructure.EFCore.Repositories
 {
-    public class BaseEFCoreRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>, IAggregateRoot, new()
+    public class BaseEFCoreRepository<TEntity, TKey> : IBaseRepository<TEntity, TKey> where TKey : notnull where TEntity : BaseEntity<TKey>, IAggregateRoot<TKey>, new()
     {
         protected readonly Microsoft.EntityFrameworkCore.DbContext _context;
         protected readonly DbSet<TEntity> _dbSet;

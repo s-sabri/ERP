@@ -5,11 +5,12 @@ using Shared.Application.Contracts.Services;
 using Shared.Application.Logging.Enums;
 using Shared.Application.Logging.Interfaces;
 using Shared.Application.Logging.Models;
+using Shared.Domain.Abstractions;
 using Shared.Domain.Entities;
 
 namespace Shared.Application.Services
 {
-    public class LogService<TEntity, TKey> : ILogService<TEntity, TKey> where TEntity : BaseEntity<TKey>, new()
+    public class LogService<TEntity, TKey> : ILogService<TEntity, TKey> where TKey : notnull where TEntity : BaseEntity<TKey>, IAggregateRoot<TKey>, new()
     {
         private readonly IAuditLogger _auditLogger;
         private readonly IAppLogger<TEntity> _appLogger;

@@ -13,8 +13,8 @@ using Shared.Utility;
 
 namespace Shared.Application.Services
 {
-    public abstract class BaseService<TEntity, TReadDto, TKey> : IBaseService<TEntity, TReadDto, TKey>
-        where TEntity : BaseEntity<TKey>, IAggregateRoot, new() where TKey : notnull
+    public abstract class BaseService<TEntity, TReadDto, TKey> : IBaseService<TEntity, TReadDto, TKey> where TKey : notnull
+        where TEntity : BaseEntity<TKey>, IAggregateRoot<TKey>, new()
     {
         protected readonly IBaseRepository<TEntity, TKey> _repository;
         protected readonly IUtilityUnitOfWork _utility;

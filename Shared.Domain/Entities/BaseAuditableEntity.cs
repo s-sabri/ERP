@@ -2,7 +2,7 @@
 
 namespace Shared.Domain.Entities
 {
-    public abstract class BaseAuditableEntity<TKey> : BaseEntity<TKey>, IAuditableEntity
+    public abstract class BaseAuditableEntity<TKey> : BaseEntity<TKey>, IAuditableEntity where TKey : notnull
     {
         public string? CreateDate { get; private set; }
         public TimeSpan? CreateTime { get; private set; }

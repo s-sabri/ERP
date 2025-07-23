@@ -5,7 +5,7 @@ using Shared.Domain.Common;
 
 namespace Shared.Domain.Repositories
 {
-    public interface IBaseRepository<TEntity, TKey> where TEntity : BaseEntity<TKey>, IAggregateRoot, new()
+    public interface IBaseRepository<TEntity, TKey> where TKey : notnull where TEntity : BaseEntity<TKey>, IAggregateRoot<TKey>, new()
     {
         Task AddAsync(TEntity entity);
         Task AddRangeAsync(IEnumerable<TEntity> entities);
