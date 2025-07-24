@@ -1,8 +1,8 @@
-﻿namespace Shared.Domain.Rules
+﻿namespace Shared.Domain.Rules.Interfaces
 {
     public interface IBusinessRule
     {
-        bool IsBroken();
         string Message { get; }
+        bool IsBroken();
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace Shared.Domain.Rules
+﻿using Shared.Domain.Rules.Base;
+
+namespace Shared.Domain.Rules.Identity
 {
-    public class UniqueNationalCodeRule : BusinessRuleBase
+    internal class UniqueNationalCodeRule : BaseBusinessRule
     {
         private readonly string _nationalCode;
         private readonly Func<string, bool> _exists;
