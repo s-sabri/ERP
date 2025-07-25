@@ -4,7 +4,7 @@ using Shared.Domain.Rules.Base;
 
 namespace Shared.Domain.Rules.Approval
 {
-    public class Level1MustBeApprovedRule<TKey> : BaseBusinessRule
+    public class Level1MustBeApprovedRule<TKey> : BaseBusinessRule where TKey : notnull
     {
         private readonly BaseApprovable2Entity<TKey> _entity;
 

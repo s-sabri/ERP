@@ -2,10 +2,6 @@
 using System.Globalization;
 
 namespace Shared.Domain.ValueObjects;
-
-/// <summary>
-/// یک ValueObject برای نمایش مبلغ به‌همراه واحد پول.
-/// </summary>
 public sealed class Money : ValueObject
 {
     private const int Scale = 2;

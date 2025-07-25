@@ -2,7 +2,7 @@
 
 namespace Shared.Domain.Entities
 {
-    public abstract class BaseDeactivableEntity<TKey> : BaseAuditableEntity<TKey>, IDeactivableEntity
+    public abstract class BaseDeactivableEntity<TKey> : BaseAuditableEntity<TKey>, IDeactivableEntity where TKey : notnull
     {
         public bool IsDeactive { get; private set; } = false;
         public string? DeactiveDate { get; private set; }

@@ -2,7 +2,7 @@
 
 namespace Shared.Domain.Entities
 {
-    public abstract class BaseApprovable3Entity<TKey> : BaseApprovable2Entity<TKey>, IApprovable3Entity
+    public abstract class BaseApprovable3Entity<TKey> : BaseApprovable2Entity<TKey>, IApprovable3Entity where TKey : notnull
     {
         public bool IsApproved3 { get; private set; } = false;
         public string? Approve3Date { get; private set; }
