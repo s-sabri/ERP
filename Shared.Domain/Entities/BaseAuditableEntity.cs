@@ -12,11 +12,14 @@ namespace Shared.Domain.Entities
         public TimeSpan? UpdateTime { get; private set; }
         public int? UpdatedByUserId { get; private set; }
         public string? UpdatedByUserFullName { get; private set; }
+        public string? UpdateComment { get; set; }
         public bool IsDeleted { get; private set; } = false;
         public string? DeleteDate { get; private set; }
         public TimeSpan? DeleteTime { get; private set; }
         public int? DeletedByUserId { get; private set; }
         public string? DeletedByUserFullName { get; private set; }
+        public string? DeleteComment { get; set; }
+
         public byte[]? RowVersion { get; private set; }
 
         protected BaseAuditableEntity()
