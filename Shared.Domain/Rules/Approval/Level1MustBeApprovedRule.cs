@@ -1,5 +1,4 @@
-﻿using Shared.Domain.Abstractions.Behaviors;
-using Shared.Domain.Entities;
+﻿using Shared.Domain.Entities;
 using Shared.Domain.Rules.Base;
 
 namespace Shared.Domain.Rules.Approval
