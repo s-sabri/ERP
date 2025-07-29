@@ -6,7 +6,8 @@
         public string EntityType { get; }
         public int ApprovalStep { get; }
 
-        public EntityApprovedEvent(TKey entityId, string entityType, int step, DateTime OccurredOn) : base(OccurredOn)
+        public EntityApprovedEvent(TKey entityId, string entityType, int step, DateTime OccurredOn)
+            : base(OccurredOn)
         {
             EntityId = entityId;
             EntityType = entityType;

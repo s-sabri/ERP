@@ -56,7 +56,7 @@ namespace Shared.Application.Services
         {
             var oldEntity = await _repository.GetByIdAsync(id, BuildIncludes());
             if (oldEntity == null)
-                throw new DomainNotFoundException($"{typeof(TEntity).Name} with ID {id} not found");
+                throw new DomainNotFoundException(typeof(TEntity).Name, id);
 
             var newEntity = _mapper.Map<TEntity>(dto);
             var logOldEntity = _mapper.Map<TEntity>(oldEntity);
@@ -72,7 +72,7 @@ namespace Shared.Application.Services
         {
             var oldEntity = await _repository.GetByIdAsync(id, BuildIncludes());
             if (oldEntity == null)
-                throw new DomainNotFoundException($"{typeof(TEntity).Name} with ID {id} not found");
+                throw new DomainNotFoundException(typeof(TEntity).Name, id);
 
             var changeLog = new ChangeLog();
             var now = PersianDateTime.Create(await _utility.PersianDateProvider.GetPersianDateTimeAsync());
@@ -98,7 +98,7 @@ namespace Shared.Application.Services
         {
             var entity = await _repository.GetByIdAsync(id, include);
             if (entity == null)
-                throw new DomainNotFoundException($"{typeof(TEntity).Name} with ID {id} not found.");
+                throw new DomainNotFoundException(typeof(TEntity).Name, id);
 
             return _mapper.Map<TReadDto>(entity);
         }
