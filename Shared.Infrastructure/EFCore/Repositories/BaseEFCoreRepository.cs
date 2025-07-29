@@ -1,9 +1,11 @@
 ﻿using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;
 using Shared.Domain.Abstractions;
-using Shared.Domain.Entities;
 using Shared.Domain.Common;
+using Shared.Domain.Entities;
 using Shared.Domain.Repositories;
+using Shared.Domain.Specifications;
+using Shared.Infrastructure.EFCore.Specifications;
 
 namespace Shared.Infrastructure.EFCore.Repositories
 {
@@ -128,69 +130,53 @@ namespace Shared.Infrastructure.EFCore.Repositories
                 PageSize = pageSize
             };
         }
-        public async Task<IEnumerable<TEntity>> GetByExpressionAsync(Expression<Func<TEntity, bool>> predicate,
-            Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, bool asNoTracking = false)
+        public async Task<IEnumerable<TEntity>> GetBySpecificationAsync(ISpecification<TEntity> specification, bool asNoTracking = false)
         {
-            var query = _dbSet.Where(predicate).AsQueryable();
-
-            if (include != null)
-                query = include(query);
-
+            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
             if (asNoTracking)
                 query = query.AsNoTracking();
-
             return await query.ToListAsync();
         }
-        public async Task<Paginated<TEntity>> GetByExpressionPaginatedAsync(Expression<Func<TEntity, bool>> predicate, int page, int pageSize,
-            Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, bool asNoTracking = false)
+        public async Task<Paginated<TEntity>> GetBySpecificationPaginatedAsync(ISpecification<TEntity> specification, int page, int pageSize,
+            bool asNoTracking = false)
         {
-            var totalCount = await _dbSet.Where(predicate).CountAsync();
-            var query = _dbSet.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).AsQueryable();
-
-            if (include != null)
-                query = include(query);
-
+            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
             if (asNoTracking)
                 query = query.AsNoTracking();
 
-            var result = await query.ToListAsync();
+            var totalCount = await query.CountAsync();
+            var items = await query.Skip((page - 1) * pageSize).Take(pageSize).ToListAsync();
+
             return new Paginated<TEntity>
             {
-                Items = result,
+                Items = items,
                 TotalCount = totalCount,
                 Page = page,
                 PageSize = pageSize
             };
         }
-        public async Task<IEnumerable<TResult>> GetProjectedByExpressionAsync<TResult>(Expression<Func<TEntity, bool>> predicate,
-            Expression<Func<TEntity, TResult>> selector, Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, bool asNoTracking = false)
+        public async Task<IEnumerable<TResult>> GetProjectedBySpecificationAsync<TResult>(ISpecification<TEntity> specification, Expression<Func<TEntity, TResult>> selector,
+            bool asNoTracking = false)
         {
-            var query = _dbSet.Where(predicate).AsQueryable();
-
-            if (include != null)
-                query = include(query);
-
+            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
             if (asNoTracking)
                 query = query.AsNoTracking();
 
             return await query.Select(selector).ToListAsync();
         }
-        public async Task<Paginated<TResult>> GetProjectedByExpressionPaginatedAsync<TResult>(Expression<Func<TEntity, bool>> predicate,
-            Expression<Func<TEntity, TResult>> selector, int page, int pageSize, Func<IQueryable<TEntity>, IQueryable<TEntity>>? include = null, bool asNoTracking = false)
+        public async Task<Paginated<TResult>> GetProjectedBySpecificationPaginatedAsync<TResult>(ISpecification<TEntity> specification, Expression<Func<TEntity, TResult>> selector,
+            int page, int pageSize, bool asNoTracking = false)
         {
-            var totalCount = await _dbSet.Where(predicate).CountAsync();
-            var query = _dbSet.Where(predicate).Skip((page - 1) * pageSize).Take(pageSize).AsQueryable();
-
-            if (include != null)
-                query = include(query);
-
+            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
             if (asNoTracking)
                 query = query.AsNoTracking();
 
-            var result = await query.Select(selector).ToListAsync();
+            var totalCount = await query.CountAsync();
+            var items = await query.Skip((page - 1) * pageSize).Take(pageSize).Select(selector).ToListAsync();
+
             return new Paginated<TResult>
             {
-                Items = result,
+                Items = items,
                 TotalCount = totalCount,
                 Page = page,
                 PageSize = pageSize

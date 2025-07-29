@@ -17,25 +17,25 @@ namespace Shared.Infrastructure.EFCore.DbContext
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                ApplyGlobalFilters(modelBuilder, entityType);
-                ApplyConcurrencyTokens(modelBuilder, entityType);
+                if (IsAssignableToGenericBase(entityType.ClrType, typeof(BaseAuditableEntity<>)))
+                {
+                    ApplyGlobalFilters(modelBuilder, entityType);
+                    ApplyConcurrencyTokens(modelBuilder, entityType);
+                }
             }
         }
 
         private void ApplyGlobalFilters(ModelBuilder modelBuilder, IMutableEntityType entityType)
         {
-            if (entityType.ClrType.BaseType != null && typeof(BaseAuditableEntity<>).IsAssignableFrom(entityType.ClrType.BaseType))
-            {
-                var parameter = Expression.Parameter(entityType.ClrType, "e");
-                var propertyMethodInfo = typeof(EF).GetMethod("Property")!
-                    .MakeGenericMethod(typeof(bool));
-                var isDeletedProperty =
-                    Expression.Call(propertyMethodInfo, parameter, Expression.Constant("IsDeleted"));
-                var compareExpression = Expression.Equal(isDeletedProperty, Expression.Constant(false));
-                var lambda = Expression.Lambda(compareExpression, parameter);
+            var parameter = Expression.Parameter(entityType.ClrType, "e");
+            var propertyMethodInfo = typeof(EF).GetMethod("Property")!
+                .MakeGenericMethod(typeof(bool));
+            var isDeletedProperty =
+                Expression.Call(propertyMethodInfo, parameter, Expression.Constant("IsDeleted"));
+            var compareExpression = Expression.Equal(isDeletedProperty, Expression.Constant(false));
+            var lambda = Expression.Lambda(compareExpression, parameter);
 
-                modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
-            }
+            modelBuilder.Entity(entityType.ClrType).HasQueryFilter(lambda);
         }
         private void ApplyConcurrencyTokens(ModelBuilder modelBuilder, IMutableEntityType entityType)
         {
@@ -50,6 +50,18 @@ namespace Shared.Infrastructure.EFCore.DbContext
                     .IsRowVersion()
                     .IsConcurrencyToken();
             }
+        }
+        private static bool IsAssignableToGenericBase(Type? type, Type genericBase)
+        {
+            while (type is not null && type != typeof(object))
+            {
+                if (type.IsGenericType && type.GetGenericTypeDefinition() == genericBase)
+                    return true;
+
+                type = type.BaseType;
+            }
+
+            return false;
         }
     }
 }

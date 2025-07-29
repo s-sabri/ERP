@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Shared.Infrastructure.EFCore.Fluent;
 using Shared.Infrastructure.Logging.Entities;
 
 namespace Shared.Infrastructure.EFCore.Configurations
@@ -20,42 +21,20 @@ namespace Shared.Infrastructure.EFCore.Configurations
                 .HasColumnType("datetime2(3)")
                 .IsRequired();
 
-            builder.Property(e => e.UserId)
-                .HasColumnType("nvarchar(50)");
-
-            builder.Property(e => e.UserFullName)
-                .HasColumnType("nvarchar(256)");
-
-            builder.Property(e => e.IpAddress)
-                .HasColumnType("nvarchar(50)");
-
             builder.Property(e => e.UserAgent)
                 .HasColumnType("nvarchar(1024)");
 
-            builder.Property(e => e.Module)
-                .HasColumnType("nvarchar(100)");
-
-            builder.Property(e => e.SubSystem)
-                .HasColumnType("nvarchar(100)");
-
-            builder.Property(e => e.Action)
-                .HasColumnType("nvarchar(100)");
-
-            builder.Property(e => e.EntityName)
-                .HasColumnType("nvarchar(128)");
-
-            builder.Property(e => e.EntityId)
-                .HasColumnType("nvarchar(100)");
-
-            builder.Property(e => e.Status)
-                .HasColumnType("nvarchar(50)");
-
-            builder.Property(e => e.CorrelationId)
-                .HasColumnType("nvarchar(100)");
-
-            builder.Property(e => e.TransactionId)
-                .HasColumnType("nvarchar(100)");
-
+            builder.Property(e => e.UserId).UseSmallString();
+            builder.Property(e => e.UserFullName).UseLargeString();
+            builder.Property(e => e.IpAddress).UseSmallString();
+            builder.Property(e => e.Module).UseMediumString();
+            builder.Property(e => e.SubSystem).UseMediumString();
+            builder.Property(e => e.Action).UseMediumString();
+            builder.Property(e => e.EntityName).UseMediumString();
+            builder.Property(e => e.EntityId).UseMediumString();
+            builder.Property(e => e.Status).UseSmallString();
+            builder.Property(e => e.CorrelationId).UseMediumString();
+            builder.Property(e => e.TransactionId).UseMediumString();
             builder.HasIndex(e => e.CreatedAt);
             builder.HasIndex(e => e.Module);
             builder.HasIndex(e => e.CorrelationId);
