@@ -130,17 +130,17 @@ namespace Shared.Infrastructure.EFCore.Repositories
                 PageSize = pageSize
             };
         }
-        public async Task<IEnumerable<TEntity>> GetBySpecificationAsync(ISpecification<TEntity> specification, bool asNoTracking = false)
+        public async Task<IEnumerable<TEntity>> GetBySpecificationAsync(IDomainSpecification<TEntity> specification, bool asNoTracking = false)
         {
-            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
+            var query = EFCoreDomainSpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
             if (asNoTracking)
                 query = query.AsNoTracking();
             return await query.ToListAsync();
         }
-        public async Task<Paginated<TEntity>> GetBySpecificationPaginatedAsync(ISpecification<TEntity> specification, int page, int pageSize,
+        public async Task<Paginated<TEntity>> GetBySpecificationPaginatedAsync(IDomainSpecification<TEntity> specification, int page, int pageSize,
             bool asNoTracking = false)
         {
-            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
+            var query = EFCoreDomainSpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
             if (asNoTracking)
                 query = query.AsNoTracking();
 
@@ -155,19 +155,19 @@ namespace Shared.Infrastructure.EFCore.Repositories
                 PageSize = pageSize
             };
         }
-        public async Task<IEnumerable<TResult>> GetProjectedBySpecificationAsync<TResult>(ISpecification<TEntity> specification, Expression<Func<TEntity, TResult>> selector,
+        public async Task<IEnumerable<TResult>> GetProjectedBySpecificationAsync<TResult>(IDomainSpecification<TEntity> specification, Expression<Func<TEntity, TResult>> selector,
             bool asNoTracking = false)
         {
-            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
+            var query = EFCoreDomainSpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
             if (asNoTracking)
                 query = query.AsNoTracking();
 
             return await query.Select(selector).ToListAsync();
         }
-        public async Task<Paginated<TResult>> GetProjectedBySpecificationPaginatedAsync<TResult>(ISpecification<TEntity> specification, Expression<Func<TEntity, TResult>> selector,
+        public async Task<Paginated<TResult>> GetProjectedBySpecificationPaginatedAsync<TResult>(IDomainSpecification<TEntity> specification, Expression<Func<TEntity, TResult>> selector,
             int page, int pageSize, bool asNoTracking = false)
         {
-            var query = SpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
+            var query = EFCoreDomainSpecificationEvaluator.GetQuery(_dbSet.AsQueryable(), specification);
             if (asNoTracking)
                 query = query.AsNoTracking();
 

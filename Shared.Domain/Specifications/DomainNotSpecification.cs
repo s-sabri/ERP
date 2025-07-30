@@ -2,11 +2,11 @@
 
 namespace Shared.Domain.Specifications
 {
-    public class NotSpecification<T> : Specification<T>
+    public class DomainNotSpecification<T> : DomainSpecification<T>
     {
-        private readonly Specification<T> _spec;
+        private readonly DomainSpecification<T> _spec;
 
-        public NotSpecification(Specification<T> spec)
+        public DomainNotSpecification(DomainSpecification<T> spec)
         {
             _spec = spec;
         }

@@ -2,12 +2,12 @@
 
 namespace Shared.Domain.Specifications
 {
-    public class OrSpecification<T> : Specification<T>
+    public class DomainOrSpecification<T> : DomainSpecification<T>
     {
-        private readonly Specification<T> _left;
-        private readonly Specification<T> _right;
+        private readonly DomainSpecification<T> _left;
+        private readonly DomainSpecification<T> _right;
 
-        public OrSpecification(Specification<T> left, Specification<T> right)
+        public DomainOrSpecification(DomainSpecification<T> left, DomainSpecification<T> right)
         {
             _left = left;
             _right = right;

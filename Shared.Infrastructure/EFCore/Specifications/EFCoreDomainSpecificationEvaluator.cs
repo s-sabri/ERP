@@ -3,9 +3,9 @@ using Shared.Domain.Specifications;
 
 namespace Shared.Infrastructure.EFCore.Specifications
 {
-    public static class SpecificationEvaluator
+    public static class EFCoreDomainSpecificationEvaluator
     {
-        public static IQueryable<T> GetQuery<T>(IQueryable<T> inputQuery, ISpecification<T> specification) where T : class
+        public static IQueryable<TEntity> GetQuery<TEntity>(IQueryable<TEntity> inputQuery, IDomainSpecification<TEntity> specification) where TEntity : class
         {
             var query = inputQuery;
 
